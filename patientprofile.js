@@ -64,3 +64,162 @@ function loginUser(role) {
     })
   })
 }
+
+//ANCHOR - Patient user logged in
+// Patient can choose to view or update personal details or view medical info
+function handlePatient() {
+  console.log(`\nWelcome patient`)
+  console.log('\n1. View and update personal details')
+  console.log('2. View medical details')
+  console.log('0. Return to main menu')
+
+  
+rl.question('\nChoose an option: ', (choice) => {  //prompting user to select an option
+  switch (choice.trim()) {  //the start of a switch statement that evaluates what the option the user selects
+    case '1': return updatePatientdetails()  //go to update and/or view personal information
+    case '2': return displayMedicalDetails()  //go to view their medical details
+    case '0': return showMenu()  //return to the main menu
+    //default is designed to validate user input. If 1, 2 or 3 are not selected or input is invalid.
+    default:  console.log('Invalid option. Try again.'); handlePatient()  //default
+  }
+})
+}
+
+// function to display personal information, also the interface for updating their information
+function displayPersonalInformation(){
+   const p = profile.personalDetails // storing the current patients details into a variable
+
+//    logging patient details to CLI
+  console.log(`\nWelcome, ${p.fullName}`)
+  console.log('\n--- Your Current Details ---')
+  console.log(`1. Full Name: ${p.fullName}`)
+  console.log(`2. Date of Birth: ${p.dateOfBirth}`)
+  console.log(`3. Gender: ${p.gender}`)
+  console.log(`4. Address: ${p.address}`)
+  console.log(`5. Phone: ${p.contact.phone}`)
+  console.log(`6. Email: ${p.contact.email}`)
+  console.log(`7. Emergency Contact Name: ${p.emergencyContact.name}`)
+  console.log(`8. Emergency Contact Relationship: ${p.emergencyContact.relationship}`)
+  console.log(`9. Emergency Contact Phone: ${p.emergencyContact.phone}`)
+  console.log('0. Return to Main Menu')
+}
+
+// fuction display patients medical details (display only)
+function displayMedicalDetails() {
+    const m = profile.medicalDetails // storing the medical details into a variable
+
+    // logging medical details to CLI
+  console.log('\n--- Your Medical Details ---')
+  console.log('Diagnoses:', m.diagnoses.join(', '))
+  console.log('Allergies:', m.allergies.join(', '))
+  console.log('Medications:', m.medications.join(', '))
+  console.log('\nUpcoming Appointments:')
+  m.upcomingAppointments.forEach((a, i) => {  //looping through upcoming appointments to display them in a list
+  console.log(` ${i + 1}. ${a.date} - ${a.type}`)
+  })
+
+  // prompting the user to press enter to return to the main menu
+  rl.question('\nPress Enter to return to the main menu.', () => {
+    showMenu()
+  })
+}
+
+// function that allows users to update personal details
+function updatePatientdetails() {
+   const p = profile.personalDetails // storing the current patients details into a variable
+  displayPersonalInformation()  //calling function to display personal information
+
+//   prompting user to select through the options 1-9
+  rl.question('\nEnter the number of the field you want to update (or 0 to return): ', choice => {
+    switch (choice.trim()) {  //the start of a switch statement that evaluates what the option the user selects
+      case '1':  //if 1 is selected do:
+        // changing full name
+        //prompt user to enter new value that will change the value in the fullName cell
+        rl.question('Enter new full name: ', value => {  
+          p.fullName = value.trim()  //changing the previous value to new one
+          saveProfile()  //calling the save fucntion to save changes
+          console.log('Full name updated!')  //letting the user know the change was successful
+          updatePatientdetails()  //calling the fucntion to continue view and/or updating personal details
+        })
+        break  //moving to next possible option
+      case '2':  //if 2 is selected do:
+        // changing date of birth
+        rl.question('Enter new date of birth (YYYY-MM-DD): ', value => {  
+          p.dateOfBirth = value.trim()
+          saveProfile()
+          console.log('Date of birth updated!')
+          updatePatientdetails()
+        })
+        break
+      case '3':  //if 3 is selected do:
+        // changing gender
+        rl.question('Enter new gender: ', value => {  
+          p.gender = value.trim()
+          saveProfile()
+          console.log('Gender updated!')
+          updatePatientdetails()
+        })
+        break
+      case '4':  //if 4 is selected do:
+        // changing address
+        rl.question('Enter new address: ', value => {
+          p.address = value.trim()
+          saveProfile()
+          console.log('Address updated!')
+          updatePatientdetails()
+        })
+        break
+      case '5':  //if 5 is selected do:
+        // changing contact number
+        rl.question('Enter new phone number: ', value => {
+          p.contact.phone = value.trim()
+          saveProfile()
+          console.log('Phone updated!')
+          updatePatientdetails()
+        })
+        break
+      case '6':  //if 6 is selected do:
+        // changing email address
+        rl.question('Enter new email: ', value => {
+          p.contact.email = value.trim()
+          saveProfile()
+          console.log('Email updated!')
+          updatePatientdetails()
+        })
+        break 
+      case '7':  //if 7 is selected do:
+        // changing emergency contact name
+        rl.question('Enter new emergency contact name: ', value => {
+          p.emergencyContact.name = value.trim()
+          saveProfile()
+          console.log('Emergency contact name updated!')
+          updatePatientdetails()
+        })
+        break
+      case '8':  //if 8 is selected do:
+        // changing emergency contact relationship
+        rl.question('Enter new emergency contact relationship: ', value => {
+          p.emergencyContact.relationship = value.trim()
+          saveProfile()
+          console.log('Emergency contact relationship updated!')
+         updatePatientdetails()
+        })
+        break
+      case '9':  //if 9 is selected do:
+        // changing emergency contacts contact number
+        rl.question('Enter new emergency contact phone: ', value => {
+          p.emergencyContact.phone = value.trim()
+          saveProfile()
+          console.log('Emergency contact phone updated!')
+          updatePatientdetails()
+        })
+        break
+      case '0':  //if 0 is selected do:
+        handlePatient() // calling function to go back to main menu
+        break
+      default: //default is designed to validate user input. If not within 1-9 range or input is invalid.
+        console.log('Invalid option. Try again.')  //letting user know that the iput was invalid
+        updatePatientdetails()  //return to continue viewing and/or updating details
+    }
+  })
+}
