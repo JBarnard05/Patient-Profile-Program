@@ -25,3 +25,22 @@ const rl = readline.createInterface({
 function saveProfile() {
   fs.writeFileSync(FILE, JSON.stringify(profile, null, 2))  //Printed with 2-space indentaion
 }
+
+// Display the main menu where user selects who is loging in
+function showMenu() {
+  console.log('\n--- Patient Health Record System ---')
+  console.log('1. Log in as Patient')
+  console.log('2. Log in as Healthcare Professional')
+  console.log('3. Exit')
+
+
+  rl.question('\nChoose an option: ', (choice) => {  //prompting the user to select their role
+    switch (choice.trim()) {  //the start of a switch statement that evaluates what the option the user selects
+      case '1': return loginUser('patient')  //patient login selected
+      case '2': return loginUser('professional')  //healthcare professional login selected
+      case '3': rl.close(); return console.log('Goodbye!')  //exits the program selected, displays goodbye message and close CLI
+      //default is designed to validate user input. If not within 1-3 range or invalid.
+      default:  console.log('Invalid option. Try again.'); showMenu()  //default
+    }
+  })
+}
