@@ -359,3 +359,7 @@ function updateMedicalDetails() {
     }
   })
 }
+
+//ANCHOR - Starting the program
+// Start the patient profile program in the CLI
+showMenu()
