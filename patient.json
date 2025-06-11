@@ -1,0 +1,58 @@
+{
+  "login": {
+    "patient": {
+      "username": "emma",
+      "password": "patient123"
+    },
+    "professional": {
+      "username": "drsmith",
+      "password": "medic456"
+    }
+  },
+  "personalDetails": {
+    "fullName": "Emma Thompson",
+    "dateOfBirth": "1988-07-14",
+    "gender": "Female",
+    "address": "10 Hill Street, Wellington",
+    "contact": {
+      "phone": "0211234567",
+      "email": "emma.thompson@example.com"
+    },
+    "emergencyContact": {
+      "name": "John Thompson",
+      "relationship": "Brother",
+      "phone": "0217654321"
+    }
+  },
+  "medicalDetails": {
+    "diagnoses": [
+      "Asthma",
+      "Diabetes"
+    ],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medications": [
+      "Metformin",
+      "Ventolin"
+    ],
+    "immunisations": [
+      "COVID-19",
+      "MMR"
+    ],
+    "testResults": [
+      {
+        "date": "2025-05-10",
+        "type": "Blood Sugar",
+        "result": "7.2 mmol/L"
+      }
+    ],
+    "upcomingAppointments": [
+      {
+        "date": "2025-06-15",
+        "type": "GP Checkup"
+      }
+    ],
+    "notes": "Patient advised to monitor glucose daily."
+  }
+}
