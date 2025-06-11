@@ -44,3 +44,23 @@ function showMenu() {
     }
   })
 }
+
+//ANCHOR - Program login
+// Login prompt for patient or professional
+//function requires a parameter "role" to know where to get the username and password from in the ".json" file
+function loginUser(role) {  
+  const creds = profile.login[role]  //variable storing the values brought from the ".json" file
+
+  rl.question(`\nEnter username for ${role}: `, (username) => {  //prompting user to enter their username
+    rl.question('Enter password: ', (password) => {  //prompting user to enter their password
+        //validating if username and password matches the ones brought from the ".json" file
+      if (username === creds.username && password === creds.password) {  
+        console.log(`\nLogin successful as ${role}!`)  //diplay if matches
+        role === 'patient' ? handlePatient() : handleProfessional()  //navigate to next page based on role
+      } else {
+        console.log('\nInvalid credentials. Try again.')  //send back to main menu if invalid credentials
+        showMenu() // Send them back to main menu
+      }
+    })
+  })
+}
