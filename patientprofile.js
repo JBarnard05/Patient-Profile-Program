@@ -223,3 +223,139 @@ function updatePatientdetails() {
     }
   })
 }
+
+//ANCHOR - Healthcare professional user logged in 
+// function for professional to choose what to view and/or update
+function handleProfessional() {
+
+    //logging options to the CLI
+  console.log('\n--- Healthcare Professional Access ---')
+  console.log('1. View and update patient personal details')
+  console.log('2. View and update medical details')
+  console.log('0. Return to main menu')
+
+ 
+// prompting the user to select an option
+  rl.question('\nChoose an option: ', (choice) => {
+  switch (choice.trim()) { //the start of a switch statement that evaluates what the option the user selects
+    case '1': return updatePatientdetails()  //selected to update/view patient details
+    case '2': return updateMedicalDetails()  //selected to update/view patients medical details
+    case '0': return showMenu()  //selected to return to main menu 
+    //default is designed to validate user input. If not 1, 2 or 0 or input is invalid.
+    default:  console.log('Invalid option. Try again.'); handleProfessional()  //default 
+  }
+})
+
+}
+
+// function to display medical details for the healthcare professional that allows them select if they want to update as well
+function displayMDForProfessional() {  //MD = medical details | abbreviated to shorten the name of the function
+  const m = profile.medicalDetails  // storing the medical details into a variable
+
+  //logging medical details onto the CLI
+  console.log('\n--- Medical Details ---')
+  console.log(`1. Diagnoses: ${m.diagnoses.join(', ')}`)
+  console.log(`2. Allergies: ${m.allergies.join(', ')}`)
+  console.log(`3. Medications: ${m.medications.join(', ')}`)
+  console.log(`4. Immunisations: ${m.immunisations.join(', ')}`)
+  console.log(`5. Test Results: ${m.testResults.map(t => `${t.date} - ${t.type}: ${t.result}`).join(' | ')}`)
+  console.log(`6. Upcoming Appointments: ${m.upcomingAppointments.map(a => `${a.date} - ${a.type}`).join(' | ')}`)
+  console.log(`7. Notes: ${m.notes}`)
+  console.log('0. Return to previous menu')
+}
+
+// function to update medical details
+function updateMedicalDetails() {
+    const m = profile.medicalDetails // storing the medical details into a variable
+    displayMDForProfessional()  //calling function to display the medical details for the proffesional
+
+    // prompting the user to select what info they want to change
+    rl.question('\nEnter number to update (or 0 to go back): ', choice => {
+    switch (choice.trim()) {  //start of the switch statement
+      case '1':  //if 1 is selected do:
+        //promting the user enter the new value to change the value in the diagnoses cell
+        // updating diagnoses
+        rl.question('Enter new diagnoses (comma-separated): ', value => {
+          m.diagnoses = value.split(',').map(v => v.trim())  // seperating data at the commas, updating and storing it
+          saveProfile()  //calling fucntion to save the changes
+          console.log('Diagnoses updated!')  //letting user know it was successful
+          updateMedicalDetails()  //calling function to return to medical details interface
+        })
+        break
+      case '2': //if 2 is selected do:
+        //updating allergies
+        rl.question('Enter new allergies (comma-separated): ', value => {
+          m.allergies = value.split(',').map(v => v.trim())
+          saveProfile()
+          console.log('Allergies updated!')
+          updateMedicalDetails()
+        })
+        break
+      case '3': //if 3 is selected do:
+        // updating medications
+        rl.question('Enter new medications (comma-separated): ', value => {
+          m.medications = value.split(',').map(v => v.trim())
+          saveProfile()
+          console.log('Medications updated!')
+          updateMedicalDetails()
+        })
+        break
+      case '4': //if 4 is selected do:
+        // updating immunisations
+        rl.question('Enter new immunisations (comma-separated): ', value => {
+          m.immunisations = value.split(',').map(v => v.trim())
+          saveProfile()
+          console.log('Immunisations updated!')
+          updateMedicalDetails()
+        })
+        break
+      case '5':  //if 5 is selected do:
+        //three different values to be enterred for test reults
+        //updating test results
+        rl.question('Enter test results as date,type,result (e.g., 2025-06-01,Blood Pressure,Normal): ', value => { 
+          const [date, type, result] = value.split(',').map(v => v.trim())
+          if (date && type && result) {
+            m.testResults.push({ date, type, result })  //adding new results
+            saveProfile()
+            console.log('Test result added!')
+          } else {
+            console.log('Invalid input format.')
+          }
+          updateMedicalDetails()
+        })
+        break
+      case '6':  //if 6 is selected do:
+        //Two different values to be enterred for creating a new appointment
+        //updating future appointments
+        rl.question('Enter appointment as date,type (e.g., 2025-07-01,Checkup): ', value => {
+          const [date, type] = value.split(',').map(v => v.trim())
+        //   validating the input
+          if (date && type) {
+            m.upcomingAppointments.push({ date, type })  //adding new appointment
+            saveProfile()
+            console.log('Appointment added!')
+          } else {
+            console.log('Invalid input format.')
+          }
+          updateMedicalDetails()
+        })
+        break
+      case '7':  //if 7 is selected do:
+        //adding mediacl notes
+        rl.question('Enter updated notes: ', value => {
+          m.notes = value.trim()
+          saveProfile()
+          console.log('Notes updated!')
+          updateMedicalDetails()
+        })
+        break
+      case '0':  //if 0 is selected do:
+        //return to previous interface
+        handleProfessional()
+        break
+      default:
+        console.log('Invalid choice. Try again.')
+        updateMedicalDetails()
+    }
+  })
+}
