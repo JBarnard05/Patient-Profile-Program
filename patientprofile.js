@@ -144,12 +144,20 @@ function updatePatientdetails() {
         break  //moving to next possible option
       case '2':  //if 2 is selected do:
         // changing date of birth
-        rl.question('Enter new date of birth (YYYY-MM-DD): ', value => {  
-          p.dateOfBirth = value.trim()
-          saveProfile()
-          console.log('Date of birth updated!')
-          updatePatientdetails()
-        })
+ rl.question('Enter new date of birth (YYYY-MM-DD): ', value => {
+  const dob = value.trim();
+  const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(dob) && !isNaN(Date.parse(dob));
+
+  if (!isValidDate) {
+    console.log('Invalid date format. Please enter the date in YYYY-MM-DD format.');
+    return updatePatientdetails(); // Return to the update menu
+  }
+
+  p.dateOfBirth = dob;
+  saveProfile();
+  console.log('Date of birth updated!');
+  updatePatientdetails();
+});
         break
       case '3':  //if 3 is selected do:
         // changing gender
